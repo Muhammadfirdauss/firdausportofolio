@@ -1,15 +1,14 @@
-FIRDAUSPORTFOLIO
-================
+PORTFOLIO MUHAMMAD FIRDAUS
 
 Struktur:
-- index.html
-- css/style.css
-- js/app.js
-- assets/ (gambar yang sebelumnya tertanam langsung di HTML)
+- index.html : struktur website
+- css/style.css : seluruh styling
+- js/app.js : JavaScript dan animasi
+- assets/ : tempat file gambar lokal
 
 Cara menjalankan:
-1. Buka folder ini di VS Code.
-2. Jalankan index.html dengan Live Server.
-3. Pastikan koneksi internet tersedia karena font Google dan Lenis dimuat dari CDN.
+1. Buka folder ini.
+2. Jalankan index.html melalui browser atau upload ke GitHub Pages.
 
-File asli tidak diubah.
+Catatan: Import map Lenis tetap menggunakan CDN seperti pada file asli.
+Pastikan gambar yang menggunakan path lokal tersedia di folder assets.

@@ -1,4 +1,4 @@
-import Lenis from 'https://unpkg.com/lenis@1.3.23/dist/lenis.mjs';
+import Lenis from 'lenis';
 
 window.scrollTo(0, 0);
 const lenis = new Lenis({ smoothWheel: true });
@@ -116,8 +116,8 @@ function splitWords(el){
 /* About H2 with mixed color spans -> word split manually preserving muted span */
 const aboutH2 = document.getElementById('about-h2');
 (function buildAboutH2(){
-  const part1 = "Saya adalah seorang Creative Developer yang memiliki passion dalam mengembangkan website dengan perpaduan antara teknologi, desain, dan pengalaman visual yang interaktif. ";
-  const part2 = "Saya menikmati proses mengubah sebuah ide menjadi pengalaman digital yang nyata — mulai dari konsep dan desain hingga pengembangan website yang responsif, modern, dan interaktif. Saya memiliki ketertarikan khusus pada web development, UI/UX, animasi, serta teknologi 3D di dalam web.";
+  const part1 = "Saya lulusan Teknik Informatika yang senang mengubah ide jadi web yang benar-benar jalan — dari HTML, PHP, sampai database MySQL, ";
+  const part2 = "dengan pengalaman nyata di jaringan komputer, produksi konten digital bersertifikasi BNSP, serta kebiasaan kerja teliti dan cepat beradaptasi.";
   const frag = document.createDocumentFragment();
   let wordIndex = 0;
   function addWords(text, muted){
@@ -206,19 +206,19 @@ if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 /* ---------------- Hero card carousel ---------------- */
 const heroItems = [
   {
-    caption: 'UI Design',
-    title: 'Crafted with care.',
-    icon: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>'
-  },
-  {
-    caption: 'UX Research',
-    title: 'Built on insight.',
-    icon: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
-  },
-  {
-    caption: 'Frontend Dev',
-    title: 'Shipped to production.',
+    caption: 'Web Development',
+    title: 'Built to work.',
     icon: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>'
+  },
+  {
+    caption: 'Network Support',
+    title: 'Stable & reliable.',
+    icon: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>'
+  },
+  {
+    caption: 'Visual Content',
+    title: 'Made to be shared.',
+    icon: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'
   }
 ];
 let heroIdx = 0;
@@ -295,7 +295,8 @@ function updateStats(){
     }
     const target = parseFloat(el.getAttribute('data-target'));
     const suffix = el.getAttribute('data-suffix') || '';
-    const val = Math.round(progress * target);
+    const dec = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    const val = (progress * target).toFixed(dec);
     el.textContent = val + suffix;
   });
 }
@@ -474,7 +475,7 @@ requestForm.addEventListener('submit', async (e) => {
     const iw = afterImg.naturalWidth, ih = afterImg.naturalHeight;
     const scale = Math.max(cw / iw, ch / ih);
     const dw = iw * scale, dh = ih * scale;
-    const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+    const dx = (cw - dw) * 0.52, dy = (ch - dh) * 0.35;
     coverCtx.clearRect(0,0,cw,ch);
     coverCtx.drawImage(afterImg, dx, dy, dw, dh);
   }
@@ -581,4 +582,35 @@ requestForm.addEventListener('submit', async (e) => {
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
+})();
+/* ---------------- Lightbox (certificates + portfolio screenshots) ---------------- */
+(function(){
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCap = document.getElementById('lightbox-cap');
+  function openLb(src, alt, cap){
+    lbImg.src = src; lbImg.alt = alt || ''; lbCap.textContent = cap || '';
+    lb.classList.add('open');
+    requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('show')));
+    stopScroll();
+    document.addEventListener('keydown', onKey);
+  }
+  function closeLb(){
+    lb.classList.remove('show');
+    document.removeEventListener('keydown', onKey);
+    setTimeout(() => { lb.classList.remove('open'); lbImg.src = ''; startScroll(); }, 300);
+  }
+  function onKey(e){ if (e.key === 'Escape') closeLb(); }
+  document.querySelectorAll('[data-lightbox]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const scope = a.closest('li') || a;
+      const img = a.querySelector('img') || scope.querySelector('img');
+      if (!img) return;
+      const t = scope.querySelector('h3, h4');
+      openLb(img.src, img.alt, t ? t.textContent : img.alt);
+    });
+  });
+  document.getElementById('lightbox-close').addEventListener('click', closeLb);
+  lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
 })();
